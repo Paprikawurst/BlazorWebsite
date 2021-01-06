@@ -1,0 +1,148 @@
+﻿@page "/"
+
+<TitleComponent PageTitle="Home"></TitleComponent>
+
+<u>Data Binding</u>
+
+
+<br />
+
+<p>
+    Name: @person.SalesPerson
+</p>
+
+
+<hr />
+<p>
+    Amount: @person.Amount.ToString("c")
+</p>
+
+
+<p>
+    <input type="number"
+           @bind-value="person.Amount"
+           @bind-value:event="oninput" />
+</p>
+
+<hr />
+<p>
+    <label>
+        <input type="checkbox"
+               @bind-value="person.isActive" />
+
+        Check if active
+    </label>
+    <br />
+    Active Status: @person.isActive
+</p>
+
+<hr />
+<p>
+    <label>
+        <input type="radio"
+               value="1"
+               name="group"
+               checked="@(selectedGroup ==1)"
+               @onclick="@(()=>selectedGroup = 1)" />
+        1
+    </label>
+
+    <label>
+        <input type="radio"
+               value="2"
+               name="group"
+               checked="@(selectedGroup ==2)"
+               @onclick="@(()=>selectedGroup = 2)" />
+        2
+    </label>
+
+    <br />
+    currently Selected Group: @selectedGroup
+</p>
+
+<hr />
+
+<p>
+    <select @bind="selectedLocationId">
+        <option value="0">nothing</option>
+        @foreach (var loc in person.Locations)
+        {
+            <option value="@loc.Id">@loc.City</option>
+        }
+    </select>
+    Current selected LocationId: @selectedLocationId
+</p>
+
+
+<hr />
+
+<p>
+    <ul>
+        @foreach (var loc in person.Locations)
+        {
+            <li>@loc.City, @loc.Id</li>
+        }
+    </ul>
+</p>
+
+<hr />
+
+<p>
+    <table class="table">
+        @foreach(var loc in person.Locations)
+        {
+            <tr>
+                <td>@loc.Id</td>
+                <td>@person.SalesPerson</td>
+                <td> <input type="text"
+                            class="form-control"
+                            @bind-value="@loc.City"
+                            @bind-value:event="oninput"/> </td>
+                <td>blubb</td>
+            </tr>
+        }
+    </table>
+</p>
+
+
+
+@code
+{
+    IndexViewModel person;
+    int selectedGroup = 0;
+    int selectedLocationId = 0;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        person = new IndexViewModel
+        {
+            SalesPerson = "Alex",
+            Amount = 15000,
+            Locations = new List<Location>
+{
+                new Location { Id=1, City = "Landau" },
+                new Location {Id = 2, City = "Neustadt"}
+            }
+        };
+    }
+
+
+    class IndexViewModel
+    {
+        public string SalesPerson { get; set; }
+        public double Amount { get; set; }
+        public bool isActive { get; set; }
+        public List<Location> Locations;
+    }
+
+    class Location
+    {
+        public int Id { get; set; }
+        public string City { get; set; }
+    }
+
+
+
+}

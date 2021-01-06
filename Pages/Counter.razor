@@ -1,0 +1,22 @@
+﻿@page "/counter"
+
+<TitleComponent PageTitle="Counter"></TitleComponent>
+
+<CounterComponent></CounterComponent>
+
+
+<a href="@($"/team/{countX}")"> Dead End </a>
+
+
+@code {
+
+    private int countX;
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        countX = 1;
+    }
+
+}
+

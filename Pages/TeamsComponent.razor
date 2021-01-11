@@ -1,0 +1,55 @@
+﻿@page "/teams"
+
+<h3>TeamsComponent</h3>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Team Name</th>
+            <th>Team Color</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var team in teams)
+        {
+            <tr>
+                <td>@team.Name</td>
+                <td bgcolor="@team.Color" >@team.Color</td>
+                <td><a href="@($"/team/{team.Id}")">@team.Id</a></td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+@code {
+    private List<Team> teams;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        teams = new List<Team>();
+        teams.Add(new Team { Id = 1, Name = "Team One", Color = "Blue" });
+        teams.Add(new Team { Id = 2, Name = "Team Two", Color = "Green" });
+        teams.Add(new Team { Id = 3, Name = "Team Three", Color = "Red" });
+
+    }
+
+    public class Team
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Color { get; set; }
+
+    }
+
+    public class Member
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public int TeamId { get; set; }
+    }
+
+}

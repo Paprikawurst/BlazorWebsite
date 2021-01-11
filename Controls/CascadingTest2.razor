@@ -1,0 +1,16 @@
+﻿
+
+<h2 style="color:@Color">CascadingTest2</h2>
+
+<p>
+    CascadingTest2 Count: @CounterValue
+</p>
+
+@code {
+
+    [CascadingParameter (Name ="IncreasedCount")]
+    public int CounterValue { get; set; }
+
+    [CascadingParameter (Name= "TitleColor")]
+    public string Color { get; set; }
+}

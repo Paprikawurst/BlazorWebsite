@@ -2,11 +2,17 @@
 
 <TitleComponent PageTitle="Counter"></TitleComponent>
 
-<CounterComponent></CounterComponent>
-
-
-<a href="@($"/team/{countX}")"> Dead End </a>
-
+<CascadingValue Name="CounterCount" Value="countX">
+    <CascadingValue Name="TitleColor" Value="@("blue")" IsFixed="true">
+        <CounterComponent></CounterComponent>
+    </CascadingValue>
+</CascadingValue>
+<p>
+    IsFixed bei CascadingValue behebt Performance-Probleme
+</p>
+<hr />
+<DateComponent></DateComponent>
+<hr />
 
 @code {
 

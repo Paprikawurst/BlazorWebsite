@@ -1,9 +1,16 @@
-﻿<p>Current count: @currentCount</p>
-
+﻿<hr />
 <button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+<hr />
+
+
+<CascadingValue Name="IncreasedCount" Value="currentCount">
+    <CascadingTest1></CascadingTest1>
+</CascadingValue>
 
 @code {
-    private int currentCount = 0;
+
+    [CascadingParameter(Name = "CounterCount")]
+    public int currentCount { get; set; } = 1;
 
     private void IncrementCount()
     {

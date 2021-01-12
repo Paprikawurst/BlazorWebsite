@@ -1,0 +1,34 @@
+﻿@page "/button"
+
+<h3>ParentButtonComponent</h3>
+
+<ButtonComponent ChangeColor="ChangeButtonColor" ></ButtonComponent>
+
+<hr />
+
+<p style="color:@currentColor">Current Color</p>
+
+@code {
+
+    private List<string> Colors = new List<string>() { "blue", "red", "yellow", "green"};
+
+    int ColorsIndex = 0;
+    string currentColor;
+
+
+    private void ChangeButtonColor(int x)
+    {
+
+
+        if ((ColorsIndex + 1) == 4)
+        {
+            ColorsIndex = 0;
+            currentColor = Colors[ColorsIndex];
+        }
+        else
+        {
+            ColorsIndex++;
+            currentColor = Colors[ColorsIndex];
+        }
+    }
+}

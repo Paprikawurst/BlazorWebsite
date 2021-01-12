@@ -1,0 +1,20 @@
+﻿<h3>ButtonComponent</h3>
+
+<button @onclick ="ButtonClick">Click</button>
+
+@code {
+
+    [Parameter]
+    public EventCallback<int> ChangeColor { get; set; }
+    //Unterschied zwischen EventCallback und Delegate ist, dass bei Delegate nicht rerendered wird, ohne dass man StateHasChanged(); aufruft
+
+
+    int ColorsIndex = 0;
+
+
+    private void ButtonClick()
+    {
+            ChangeColor.InvokeAsync(ColorsIndex);
+    }
+
+}

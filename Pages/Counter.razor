@@ -14,9 +14,27 @@
 <DateComponent></DateComponent>
 <hr />
 
+<br />
+<br />
+<br />
+
+<button @onclick="(()=>
+                  {
+                      child.Show();
+                  })">Show Child Component
+</button>
+
+<br />
+<hr />
+<br />
+<ChildComponent @ref="child"></ChildComponent>
+
+<hr />
 @code {
 
+    private ChildComponent child;
     private int countX;
+
     protected override void OnInitialized()
     {
         base.OnInitialized();

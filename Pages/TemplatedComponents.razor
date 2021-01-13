@@ -12,12 +12,12 @@
 </FieldComponent>
 <FieldComponent Label="Input">
     <Data>
-        <input placeholder="bla" /> 
+        <input placeholder="bla" />
     </Data>
 </FieldComponent>
 <FieldComponent Label="test">
     <Data>
-        
+
     </Data>
 </FieldComponent>
 
@@ -29,15 +29,59 @@
 
 <GridAutoComponent Items="employees" ColumnsToExcludeCSV="Id"></GridAutoComponent>
 
+<br />
+<hr />
+<br />
 
 
+<RepeaterComponent @ref="repeater" Items="employees">
+    <Header>
+        <h2>HeaderTest</h2>
+    </Header>
 
-@code {     
+    <Row Context="employee">
+        <div>
+            @employee.Id
+        &nbsp;
+        <button class="btn" @onclick="@(()=>
+                                        {
+                                            EditEmployee(employee);
+                                        })">
+            Edit
+        </button>
+    </div>
+
+    <div class="ml-3">@employee.Name</div>
+    <div class="ml-5">@employee.Title</div>
+    <hr />
+</Row>
+
+<Footer>
+    <h2>FooterTest</h2>
+</Footer>
+
+
+<EditTemplate Context="currentEmployee">
+    <div>
+        <text>Employee Name: </text> <input class=" form-control" @bind-value="currentEmployee.Name" />
+    </div>
+    <div>
+        <text>Emplyoee Title: </text> <input class=" form-control" @bind-value="currentEmployee.Title" />
+    </div>
+</EditTemplate>
+</RepeaterComponent>
+
+
+@code {
     //Bei Data kann mehr stehen als bei Label z.B ein inputfeld etc. , da es ein RenderFragment ist
 
     //Bei ColumnsToExclude kann man mit einem Komma mehrere Columns excluden ( Id, Name, ...)
 
+    //
+
+    private RepeaterComponent<Employee> repeater;
     private List<Employee> employees;
+    private Employee currentEmployee;
 
     protected override void OnInitialized()
     {
@@ -51,6 +95,10 @@
         employees.Add(new Employee { Id = 4, Name = "Flo", Title = "Dev" });
     }
 
+    private void EditEmployee(Employee employee)
+    {
+        repeater.ItemToEdit = employee;
+    }
 
     public class Employee
     {

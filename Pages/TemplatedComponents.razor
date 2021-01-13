@@ -1,0 +1,63 @@
+﻿@page "/templatedcomponents"
+
+<h3>Templated Components Test</h3>
+
+
+<h4>RenderFragment</h4>
+
+<FieldComponent Label="Name">
+    <Data>
+        Hans
+    </Data>
+</FieldComponent>
+<FieldComponent Label="Input">
+    <Data>
+        <input placeholder="bla" /> 
+    </Data>
+</FieldComponent>
+<FieldComponent Label="test">
+    <Data>
+        
+    </Data>
+</FieldComponent>
+
+<br />
+<hr />
+<br />
+
+<h4>Generic Typed Item List - GridAutoComponent</h4>
+
+<GridAutoComponent Items="employees" ColumnsToExcludeCSV="Id"></GridAutoComponent>
+
+
+
+
+@code {     
+    //Bei Data kann mehr stehen als bei Label z.B ein inputfeld etc. , da es ein RenderFragment ist
+
+    //Bei ColumnsToExclude kann man mit einem Komma mehrere Columns excluden ( Id, Name, ...)
+
+    private List<Employee> employees;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        employees = new List<Employee>();
+
+        employees.Add(new Employee { Id = 1, Name = "John", Title = "Dev" });
+        employees.Add(new Employee { Id = 2, Name = "Peter", Title = "Mar" });
+        employees.Add(new Employee { Id = 3, Name = "Hans", Title = "HR" });
+        employees.Add(new Employee { Id = 4, Name = "Flo", Title = "Dev" });
+    }
+
+
+    public class Employee
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Title { get; set; }
+    }
+
+
+}

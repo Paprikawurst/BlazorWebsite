@@ -1,0 +1,23 @@
+﻿    <ul>
+        <li>
+            @Label
+            <table border="1">
+                <tr>
+                    <td>
+                        @Data
+                    </td>
+                </tr>
+            </table>
+        </li>
+</ul>
+
+
+@code {
+
+    [Parameter]
+    public string Label { get; set; }
+
+    [Parameter]
+    public RenderFragment Data { get; set; }
+
+}

@@ -135,7 +135,8 @@
     int selectedGroup = 0;
     int selectedLocationId = 0;
 
-    protected override void OnInitialized()
+    protected override void OnInitialized()     //hier OnInitializedAsync benutzen um Data Initialization Fehler zu verhindern
+                                                //damit kann man await Task.Run benutzen um zu warten bis etwas fertig ist, um dann das Laden der Seite weiterzuführen
     {
         base.OnInitialized();
 

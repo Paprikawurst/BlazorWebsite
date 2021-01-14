@@ -1,6 +1,6 @@
 ﻿@page "/lifecycle"
 
-<h3>Lifecycle</h3>
+<h3>Lifecycle and Forms</h3>
 
 <p>
     Aufgerufen wird in dieser Reihenfolge:
@@ -22,8 +22,36 @@
     </ul>
 </p>
 
+
+<EditForm Model="p" OnValidSubmit="ValidFormSubmitted">
+    <DataAnnotationsValidator></DataAnnotationsValidator>
+    <ValidationSummary></ValidationSummary>
+    <p>
+        First Name: <br />
+        <InputText id="firstname" @bind-Value="p.FirstName"></InputText>
+    </p>
+    <br />
+    <p>
+        Last Name: <br />
+        <InputText id="lastname" @bind-Value="p.LastName"></InputText>
+    </p>
+    <br />
+    <p>
+        Employee Number: <br />
+        <InputNumber id="employeenumber" @bind-Value="p.EmployeeNumber"></InputNumber>
+    </p>
+    <br />
+    <p>
+        Email: <br />
+        <InputText id="email" @bind-Value="p.Email"></InputText>
+    </p>
+    <input type="submit" value="Submit" />
+</EditForm>
+
+
 @code {
 
+    Person p = new Person();
 
     public override Task SetParametersAsync(ParameterView parameters)
     {
@@ -32,9 +60,35 @@
     }
 
 
-        protected override bool ShouldRender()
-        {
-            return base.ShouldRender();     //wenn hier return false; steht dann wird nicht rerendert
-        }
+    protected override bool ShouldRender()
+    {
+        return base.ShouldRender();     //wenn hier return false; steht dann wird nicht rerendert
+    }
 
+    private void ValidFormSubmitted()
+    {
+
+    }
+
+
+    //using System.ComponentModel.DataAnnotations
+    class Person
+    {
+
+        [Required]
+        [StringLength(100)]
+        public string FirstName { get; set; }
+
+        [Required]
+        [StringLength(100)]
+        public string LastName { get; set; }
+
+        [Required]
+        [Range(1, 1000)]
+        public int EmployeeNumber { get; set; }
+
+        [Required]
+        [EmailAddress]
+        public string Email { get; set; }
+    }
 }

@@ -1,0 +1,40 @@
+﻿@page "/lifecycle"
+
+<h3>Lifecycle</h3>
+
+<p>
+    Aufgerufen wird in dieser Reihenfolge:
+    <ul>
+        <li>
+            Parent - SetParameters <br />
+            Parent - OnInitialized <br />
+            Parent - OnParametersSet
+        </li>
+        <li>
+            Child - SetParameters <br />
+            Child - OnInitialized <br />
+            Child - OnParametersSet          @* Bis hierhin wird zweimal aufgerufen, falls die Seite zum ersten Mal aufgerufen wird (Einmal Userrequest, einmal SignalR Connection) *@
+        </li>
+        <li>
+            Parent - OnAfterRender <br />   @* Hier wird empfohlen, die Daten zu initialisieren *@
+            Child - OnAfterRender <br />
+        </li>
+    </ul>
+</p>
+
+@code {
+
+
+    public override Task SetParametersAsync(ParameterView parameters)
+    {
+        Console.WriteLine("blablabla");      // Console.WriteLine benutzen um Sachen zu loggen
+        return base.SetParametersAsync(parameters);
+    }
+
+
+        protected override bool ShouldRender()
+        {
+            return base.ShouldRender();     //wenn hier return false; steht dann wird nicht rerendert
+        }
+
+}

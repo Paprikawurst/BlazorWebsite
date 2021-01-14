@@ -34,12 +34,33 @@
 
     private ChildComponent child;
     private int countX;
+    private Timer timer; //namespace: System.Timers
+    private int timerCount;
 
     protected override void OnInitialized()
     {
         base.OnInitialized();
 
         countX = 1;
+
+        timer = new Timer(2000); //alle 2 sek / 2000ms
+        timer.Elapsed += OnTimedEvent;
+    }
+
+    private void OnTimedEvent(object source, ElapsedEventArgs e)
+    {
+        timerCount++;
+        Console.WriteLine($"Times timer activated: {timerCount}");
+    }
+
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        base.OnAfterRender(firstRender);
+        Console.WriteLine($"Counter - OnAfterRender at {DateTime.Now.ToString("hh:MM:ss.fff")}");
+        //im debugging wird das ausgegeben, wenn die komponente das erste mal (firstRender boolean) gerendert wurde
+        //wenn man erneut auf den counter drückt wird diese funktion erneut ausgeführt, aber mit firstRender = false,
+        //da es nicht das erste mal ist, dass die komponente gerendert wird
     }
 
 }

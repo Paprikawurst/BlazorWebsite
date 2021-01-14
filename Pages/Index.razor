@@ -2,6 +2,27 @@
 
 <TitleComponent PageTitle="Home"></TitleComponent>
 
+@*Klassen wie Employee oder Company oder sowas sollten im Models Ordner abgelegt werden!*@
+
+<p> When do Components render?</p>
+<p>
+    <ul>
+        <li>
+            1. When Components are created
+        </li>
+        <li>
+            2. When components events are triggered
+        </li>
+        <li>
+            3. When components parameter values are changed
+        </li>
+        <li>
+            4. When developers manually trigger the rendering via StateHasChanged();
+        </li>
+    </ul>
+</p>
+
+
 <u>Data Binding</u>
 
 
@@ -89,15 +110,17 @@
 
 <p>
     <table class="table">
-        @foreach(var loc in person.Locations)
+        @foreach (var loc in person.Locations)
         {
             <tr>
                 <td>@loc.Id</td>
                 <td>@person.SalesPerson</td>
-                <td> <input type="text"
-                            class="form-control"
-                            @bind-value="@loc.City"
-                            @bind-value:event="oninput"/> </td>
+                <td>
+                    <input type="text"
+                           class="form-control"
+                           @bind-value="@loc.City"
+                           @bind-value:event="oninput" />
+                </td>
                 <td>blubb</td>
             </tr>
         }

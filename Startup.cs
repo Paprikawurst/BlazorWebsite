@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using BlazorWebsite.Data;
+using BlazorWebsite.Pages;
 
 namespace BlazorWebsite
 {
@@ -29,7 +30,10 @@ namespace BlazorWebsite
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddSingleton<WeatherForecastService>();
-        }
+            //services.AddTransient<ICustomerService, CustomerService>();     //transient: register a service to a container and everytime you ask for an instance the container will create a new one and inject it into the component
+            //services.AddSingleton<ICustomerService, CustomerService>();     //singleton: only one instance of the object even after page refresh
+            services.AddScoped<ICustomerService, CustomerService>();          //scoped: wie singleton, aber nach page refresh und somit neuer SignalR connection wird eine neue instanz des objekts erzeugt
+        }                                                                     //bei pagerefresh wird die connection abgebrochen und eine neue SignalR connection aufgebaut
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

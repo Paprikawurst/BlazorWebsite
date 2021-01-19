@@ -4,7 +4,22 @@
 
 <DataGridComponent TItem="Employee"
                    DataItems="listEmployees"
-                   Columns="columnsDefinition"></DataGridComponent>
+                   Columns="columnsDefinition"
+                   Paging="@(new PagingConfig { Enabled = true,
+                                 CustomPager = false,            /*Hier true, wenn CustomPager angezeigt werden soll*/
+                                 PageSize = 3
+                             })">
+
+
+
+    <CustomPager>
+        @*Hier Code für CustomPager einfügen
+            außerdem muss ein DataGridComponent<Employee> Field deklariert werden und dann prevPage und nextPage
+            für die Buttons implementiert werden + die Seitenzahlanzeige von vorher kopiert werden *@
+    </CustomPager>
+
+
+</DataGridComponent>
 
 @code {
 
@@ -33,7 +48,7 @@
                     new ColumnDefinition { DataField = "Department", Caption="Department"},
                     //new ColumnDefinition { DataField = "Employment", Caption="Employment Date", Format= "yyyy/MM/dd", DataType = Configuration.DataType.Date},
                     new ColumnDefinition { DataField = "Salary", Caption="Annual Salary", DataType= Configuration.DataType.Currency, Alignment = Alignment.Right, Format= "c"}
-                                                }
+                                                        }
                 );
         }
 
@@ -76,11 +91,18 @@
                         Salary = 50000
                     }
 
-                        }
+                                }
         );
         }
 
     }
+
+    private void PrevPage
+    {
+        
+    }
+
+
 
     class Employee
     {

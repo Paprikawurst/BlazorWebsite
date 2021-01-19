@@ -42,7 +42,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in DataItems)
+        @foreach (var item in DataItems.Skip(Paging.NumOfItemsToSkip(CurrentPageNumber)).Take(Paging.NumOfItemsToTake(DataItems.Count)))
         {
         <tr>
             @foreach (var column in Columns)
@@ -94,12 +94,54 @@
     </tbody>
 </table>
 
+<div class="float-right">
+    <ul class="pagination">
+        @if (Paging != null && Paging.Enabled)
+        {
+            @if (Paging.CustomPager)
+            {
+                @CustomPager
+            }
+            else
+            {
+                <li class="page-item"><button class="page-link" style="cursor:pointer" @onclick="GoToPrevPage">Previous</button></li>
+                <li class="page-item"><span class="page-link" >&nbsp; Page @CurrentPageNumber of @Paging.MaxPageNumber(DataItems.Count)&nbsp; &nbsp;</span></li>
+                <li class="page-item"><button class="page-link" style="cursor:pointer" @onclick="GoToNextPage">Next</button></li>
+            }
+        }
+    </ul>
+</div>
+
 @code {
+
+    [Parameter]
+    public int CurrentPageNumber { get; set; } = 1;
 
     [Parameter]
     public List<TItem> DataItems { get; set; }
 
-
     [Parameter]
     public List<ColumnDefinition> Columns { get; set; }
+
+    [Parameter]
+    public PagingConfig Paging { get; set; }
+
+    [Parameter]
+    public RenderFragment CustomPager { get; set; }
+
+
+    public void GoToNextPage()
+    {
+        CurrentPageNumber = Paging.NextPageNumber(CurrentPageNumber, DataItems.Count); //DataItems should not be null
+    }
+
+    public void GoToPrevPage()
+    {
+        CurrentPageNumber = Paging.PrevPageNumber(CurrentPageNumber);
+    }
+
+
+
+
+
 }

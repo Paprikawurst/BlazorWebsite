@@ -11,6 +11,7 @@ namespace BlazorWebsite.Configuration
         {
             this.DataType = DataType.NotSet;
             this.Alignment = Alignment.NotSet;
+            this.SortDirection = SortDirection.NotSet;
         }
 
 
@@ -20,5 +21,6 @@ namespace BlazorWebsite.Configuration
         public DataType DataType { get; set; }
         public string Format { get; set; }
         public Alignment Alignment { get; set; }
+        public SortDirection SortDirection { get; set; }
     }
 }

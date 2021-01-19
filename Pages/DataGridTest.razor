@@ -43,8 +43,8 @@
             columnsDefinition.AddRange(
                 new ColumnDefinition[]                                  //employment date funktioniert aus irgendeinem grund nicht
                 {
-                    new ColumnDefinition { DataField = "Name", Caption="Name"},
-                    new ColumnDefinition { DataField = "Title", Caption="Title"},
+                    new ColumnDefinition { DataField = "Name", Caption="Name", SortDirection = SortDirection.Up},
+                    new ColumnDefinition { DataField = "Title", Caption="Title", SortDirection = SortDirection.Down},
                     new ColumnDefinition { DataField = "Department", Caption="Department"},
                     //new ColumnDefinition { DataField = "Employment", Caption="Employment Date", Format= "yyyy/MM/dd", DataType = Configuration.DataType.Date},
                     new ColumnDefinition { DataField = "Salary", Caption="Annual Salary", DataType= Configuration.DataType.Currency, Alignment = Alignment.Right, Format= "c"}
@@ -91,18 +91,11 @@
                         Salary = 50000
                     }
 
-                                }
+                }
         );
         }
 
     }
-
-    private void PrevPage
-    {
-        
-    }
-
-
 
     class Employee
     {

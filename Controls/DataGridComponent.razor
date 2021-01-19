@@ -17,24 +17,25 @@
                         switch (column.Alignment)
                         {
                             case Alignment.Left:
-                                <th class="align-left">@column.Caption</th>
+                                <th @onclick="@(() => SortData(column))" class="align-left">@column.Caption<span style="float:right" class="@(SortClass(column))"></span></th>
                                 break;
                             case Alignment.Center:
-                                <th class="align-center">@column.Caption</th>
+                                <th @onclick="@(() => SortData(column))" class="align-center">@column.Caption<span style="float:right" class="@(SortClass(column))"></span></th>
                                 break;
                             case Alignment.Right:
-                                <th class="align-right">@column.Caption</th>
+                                <th @onclick="@(() => SortData(column))" class="align-right">@column.Caption<span style="float:right" class="@(SortClass(column))"></span></th>
                                 break;
                             default:
-                                <th>@column.Caption</th>
+                                <th @onclick="@(() => SortData(column))">@column.Caption</th>
                                 break;
                         }
                         @*<th align="@column.Alignment.ToString().ToLower()">@column.Caption</th>*@
                     }
                     else
                     {
-                        <th>
+                        <th @onclick="@(() => SortData(column))">
                             @column.Caption
+                            <span style="float:right" class="@(SortClass(column))"></span>
                         </th>
                     }
                 }
@@ -44,52 +45,52 @@
     <tbody>
         @foreach (var item in DataItems.Skip(Paging.NumOfItemsToSkip(CurrentPageNumber)).Take(Paging.NumOfItemsToTake(DataItems.Count)))
         {
-        <tr>
-            @foreach (var column in Columns)
-            {
-                @if (!string.IsNullOrWhiteSpace(column.Format) && column.DataType != Configuration.DataType.NotSet)
+            <tr>
+                @foreach (var column in Columns)
                 {
-                    string value = string.Empty;
-                    switch (column.DataType)
+                    @if (!string.IsNullOrWhiteSpace(column.Format) && column.DataType != Configuration.DataType.NotSet)
                     {
-                        case Configuration.DataType.Date:
-                        case Configuration.DataType.DateTime:
-                            value = DateTime.Parse(typeof(TItem).GetProperty(column.DataField).GetValue(item).ToString()).ToString(column.Format);
-                            break;
-                        case Configuration.DataType.Boolean:
-                            value = bool.Parse(typeof(TItem).GetProperty(column.DataField).GetValue(item).ToString()).ToString();
-                            break;
-                        case Configuration.DataType.Currency:
-                            value = Math.Round(double.Parse(typeof(TItem).GetProperty(column.DataField).GetValue(item).ToString()), 2).ToString();
-                            break;
-                        default:
-                            break;
-                    }
-                    @if (column.Alignment != Alignment.NotSet)
-                    {
-                        <td align="@column.Alignment.ToString().ToLower()">@value</td>
+                        string value = string.Empty;
+                        switch (column.DataType)
+                        {
+                            case Configuration.DataType.Date:
+                            case Configuration.DataType.DateTime:
+                                value = DateTime.Parse(typeof(TItem).GetProperty(column.DataField).GetValue(item).ToString()).ToString(column.Format);
+                                break;
+                            case Configuration.DataType.Boolean:
+                                value = bool.Parse(typeof(TItem).GetProperty(column.DataField).GetValue(item).ToString()).ToString();
+                                break;
+                            case Configuration.DataType.Currency:
+                                value = Math.Round(double.Parse(typeof(TItem).GetProperty(column.DataField).GetValue(item).ToString()), 2).ToString();
+                                break;
+                            default:
+                                break;
+                        }
+                        @if (column.Alignment != Alignment.NotSet)
+                        {
+                            <td align="@column.Alignment.ToString().ToLower()">@value</td>
+                        }
+                        else
+                        {
+                            <td>@value</td>
+                        }
                     }
                     else
                     {
-                        <td>@value</td>
+                        @if (column.Alignment != Alignment.NotSet)
+                        {
+                            <td align="@column.Alignment.ToString().ToLower()">@typeof(TItem).GetProperty(column.DataField).GetValue(item)</td>
+                        }
+                        else
+                        {
+                            <td>@typeof(TItem).GetProperty(column.DataField).GetValue(item)</td>
+                        }
                     }
+
+
+
                 }
-                else
-                {
-                    @if (column.Alignment != Alignment.NotSet)
-                    {
-                        <td align="@column.Alignment.ToString().ToLower()">@typeof(TItem).GetProperty(column.DataField).GetValue(item)</td>
-                    }
-                    else
-                    {
-                        <td>@typeof(TItem).GetProperty(column.DataField).GetValue(item)</td>
-                    }
-                }
-
-
-
-            }
-        </tr>
+            </tr>
         }
     </tbody>
 </table>
@@ -105,7 +106,7 @@
             else
             {
                 <li class="page-item"><button class="page-link" style="cursor:pointer" @onclick="GoToPrevPage">Previous</button></li>
-                <li class="page-item"><span class="page-link" >&nbsp; Page @CurrentPageNumber of @Paging.MaxPageNumber(DataItems.Count)&nbsp; &nbsp;</span></li>
+                <li class="page-item"><span class="page-link">&nbsp; Page @CurrentPageNumber of @Paging.MaxPageNumber(DataItems.Count)&nbsp; &nbsp;</span></li>
                 <li class="page-item"><button class="page-link" style="cursor:pointer" @onclick="GoToNextPage">Next</button></li>
             }
         }
@@ -114,20 +115,28 @@
 
 @code {
 
-    [Parameter]
-    public int CurrentPageNumber { get; set; } = 1;
+        [Parameter]
+        public int CurrentPageNumber { get; set; } = 1;
 
-    [Parameter]
-    public List<TItem> DataItems { get; set; }
+        [Parameter]
+        public List<TItem> DataItems { get; set; }
 
-    [Parameter]
-    public List<ColumnDefinition> Columns { get; set; }
+        [Parameter]
+        public List<ColumnDefinition> Columns { get; set; }
 
-    [Parameter]
-    public PagingConfig Paging { get; set; }
+        [Parameter]
+        public PagingConfig Paging { get; set; }
 
-    [Parameter]
-    public RenderFragment CustomPager { get; set; }
+        [Parameter]
+        public RenderFragment CustomPager { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+
+        SortData();
+    }
+
 
 
     public void GoToNextPage()
@@ -141,6 +150,70 @@
     }
 
 
+    private string SortClass(ColumnDefinition col)
+    {
+        if (col.SortDirection != SortDirection.NotSet)
+        {
+            return $"sort {col.SortDirection.ToString().ToLower()}";
+        }
+        else
+        {
+            return "no-sort";
+        }
+    }
+
+    public void SortData(ColumnDefinition sortByColumn = null)
+    {
+        bool initial = (sortByColumn == null);
+
+        if (sortByColumn == null)
+        {
+            sortByColumn = Columns.FirstOrDefault(x => x.SortDirection != SortDirection.NotSet);
+            if (sortByColumn == null)
+            {
+                return;
+            }
+        }
+
+        foreach (var column in Columns)
+        {
+
+
+            if (column.DataField != sortByColumn.DataField)
+            {
+                column.SortDirection = SortDirection.NotSet;
+            }
+        }
+        if (!initial)
+        {
+            switch (sortByColumn.SortDirection)
+            {
+                case SortDirection.NotSet:
+                    sortByColumn.SortDirection = SortDirection.Up;
+                    break;
+                case SortDirection.Up:
+                    sortByColumn.SortDirection = SortDirection.Down;
+                    break;
+                case SortDirection.Down:
+                    sortByColumn.SortDirection = SortDirection.Up;
+                    break;
+                default:
+                    sortByColumn.SortDirection = SortDirection.Up;
+                    break;
+            }
+        }
+
+        if (sortByColumn.SortDirection == SortDirection.Up)
+        {
+            DataItems.Sort((x, y) => typeof(TItem).GetProperty(sortByColumn.DataField).GetValue(x).ToString()
+            .CompareTo(typeof(TItem).GetProperty(sortByColumn.DataField).GetValue(y).ToString()));          //compare x wert to y wert
+        }
+        else
+        {
+            DataItems.Sort((x, y) => typeof(TItem).GetProperty(sortByColumn.DataField).GetValue(y).ToString()
+            .CompareTo(typeof(TItem).GetProperty(sortByColumn.DataField).GetValue(x).ToString()));          //compare y wert to x wert
+        }
+    }
 
 
 

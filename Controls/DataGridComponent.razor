@@ -1,0 +1,105 @@
+﻿@typeparam TItem
+
+<table class="table">
+    <thead>
+        <tr>
+            @if (Columns == null || Columns.Count <= 0)
+            {
+                //Create the header with reflection
+            }
+            else
+            {
+                //Create the header based on column definitions
+                foreach (var column in Columns)
+                {
+                    @if (column.Alignment != Alignment.NotSet)
+                    {
+                        switch (column.Alignment)
+                        {
+                            case Alignment.Left:
+                                <th class="align-left">@column.Caption</th>
+                                break;
+                            case Alignment.Center:
+                                <th class="align-center">@column.Caption</th>
+                                break;
+                            case Alignment.Right:
+                                <th class="align-right">@column.Caption</th>
+                                break;
+                            default:
+                                <th>@column.Caption</th>
+                                break;
+                        }
+                        @*<th align="@column.Alignment.ToString().ToLower()">@column.Caption</th>*@
+                    }
+                    else
+                    {
+                        <th>
+                            @column.Caption
+                        </th>
+                    }
+                }
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in DataItems)
+        {
+        <tr>
+            @foreach (var column in Columns)
+            {
+                @if (!string.IsNullOrWhiteSpace(column.Format) && column.DataType != Configuration.DataType.NotSet)
+                {
+                    string value = string.Empty;
+                    switch (column.DataType)
+                    {
+                        case Configuration.DataType.Date:
+                        case Configuration.DataType.DateTime:
+                            value = DateTime.Parse(typeof(TItem).GetProperty(column.DataField).GetValue(item).ToString()).ToString(column.Format);
+                            break;
+                        case Configuration.DataType.Boolean:
+                            value = bool.Parse(typeof(TItem).GetProperty(column.DataField).GetValue(item).ToString()).ToString();
+                            break;
+                        case Configuration.DataType.Currency:
+                            value = Math.Round(double.Parse(typeof(TItem).GetProperty(column.DataField).GetValue(item).ToString()), 2).ToString();
+                            break;
+                        default:
+                            break;
+                    }
+                    @if (column.Alignment != Alignment.NotSet)
+                    {
+                        <td align="@column.Alignment.ToString().ToLower()">@value</td>
+                    }
+                    else
+                    {
+                        <td>@value</td>
+                    }
+                }
+                else
+                {
+                    @if (column.Alignment != Alignment.NotSet)
+                    {
+                        <td align="@column.Alignment.ToString().ToLower()">@typeof(TItem).GetProperty(column.DataField).GetValue(item)</td>
+                    }
+                    else
+                    {
+                        <td>@typeof(TItem).GetProperty(column.DataField).GetValue(item)</td>
+                    }
+                }
+
+
+
+            }
+        </tr>
+        }
+    </tbody>
+</table>
+
+@code {
+
+    [Parameter]
+    public List<TItem> DataItems { get; set; }
+
+
+    [Parameter]
+    public List<ColumnDefinition> Columns { get; set; }
+}

@@ -1,0 +1,93 @@
+﻿@page "/datagridtest"
+
+<h3>DataGridTest</h3>
+
+<DataGridComponent TItem="Employee"
+                   DataItems="listEmployees"
+                   Columns="columnsDefinition"></DataGridComponent>
+
+@code {
+
+
+    private List<Employee> listEmployees;
+    private List<ColumnDefinition> columnsDefinition;
+
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        Initialize();
+    }
+
+
+    private void Initialize()
+    {
+        if (columnsDefinition == null)
+        {
+            columnsDefinition = new List<ColumnDefinition>();
+            columnsDefinition.AddRange(
+                new ColumnDefinition[]                                  //employment date funktioniert aus irgendeinem grund nicht
+                {
+                    new ColumnDefinition { DataField = "Name", Caption="Name"},
+                    new ColumnDefinition { DataField = "Title", Caption="Title"},
+                    new ColumnDefinition { DataField = "Department", Caption="Department"},
+                    //new ColumnDefinition { DataField = "Employment", Caption="Employment Date", Format= "yyyy/MM/dd", DataType = Configuration.DataType.Date},
+                    new ColumnDefinition { DataField = "Salary", Caption="Annual Salary", DataType= Configuration.DataType.Currency, Alignment = Alignment.Right, Format= "c"}
+                                                }
+                );
+        }
+
+        if (listEmployees == null)
+        {
+            listEmployees = new List<Employee>();
+            listEmployees.AddRange(
+                new Employee[]
+                {
+                    new Employee
+                    {
+                        Name = "John Peters",
+                        Title = "Developer",
+                        Department = "Software",
+                        //EmploymentDate = DateTime.Now,
+                        Salary = 100000
+                    },
+                    new Employee
+                    {
+                        Name = "Hans Josef",
+                        Title = "Testing",
+                        Department = "Software",
+                        //EmploymentDate = DateTime.Now,
+                        Salary = 200000
+                    },
+                    new Employee
+                    {
+                        Name = "Sarah Miller",
+                        Title = "HR",
+                        Department = "Finance",
+                        //EmploymentDate = DateTime.Now,
+                        Salary = 10000
+                    },
+                    new Employee
+                    {
+                        Name = "Guy Man",
+                        Title = "Developer",
+                        Department = "Software",
+                        //EmploymentDate = DateTime.Now,
+                        Salary = 50000
+                    }
+
+                        }
+        );
+        }
+
+    }
+
+    class Employee
+    {
+        public string Name { get; set; }
+        public string Title { get; set; }
+        public string Department { get; set; }
+        //public DateTime EmploymentDate { get; set; }
+        public int Salary { get; set; }
+    }
+}
